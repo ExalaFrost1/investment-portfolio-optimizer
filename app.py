@@ -726,37 +726,35 @@ with tab4:
                                     "This might be due to insufficient data or date range spanning less than a month.")
                         else:
                             st.info("Not enough data for monthly returns analysis. Please select a longer date range.")
-            except Exception as e:
-            st.error(f"Error processing benchmark data: {str(e)}")
-            st.info("Try selecting a different benchmark or check your internet connection.")
 
-else:
-st.info("Please load stock data in the Portfolio Builder tab first.")
 
-# Instructions and additional information at the bottom
-st.markdown("---")
-st.markdown("""
-### How to Use This App
-1. In the **Portfolio Builder** tab, enter stock tickers and load data
-2. View the **Risk-Return Analysis** to understand individual asset performance
-3. Use the **Portfolio Optimization** to find optimal asset allocations
-4. Check **Historical Performance** to see how your portfolio would have performed
+            # Instructions and additional information at the bottom
+            st.markdown("---")
+            st.markdown("""
+                        ### How to Use This App
+                        1. In the **Portfolio Builder** tab, enter stock tickers and load data
+                        2. View the **Risk-Return Analysis** to understand individual asset performance
+                        3. Use the **Portfolio Optimization** to find optimal asset allocations
+                        4. Check **Historical Performance** to see how your portfolio would have performed
 
-### References
-- [Modern Portfolio Theory](https://en.wikipedia.org/wiki/Modern_portfolio_theory)
-- [Efficient Frontier](https://en.wikipedia.org/wiki/Efficient_frontier)
-- [Sharpe Ratio](https://en.wikipedia.org/wiki/Sharpe_ratio)
-""")
+                        ### References
+                        - [Modern Portfolio Theory](https://en.wikipedia.org/wiki/Modern_portfolio_theory)
+                        - [Efficient Frontier](https://en.wikipedia.org/wiki/Efficient_frontier)
+                        - [Sharpe Ratio](https://en.wikipedia.org/wiki/Sharpe_ratio)
+                        """)
 
-# Footer with project information
-st.markdown("---")
-st.markdown("""
-**Course Name:** AF3005 – Programming for Finance  
-**Instructor:** Dr. Usama Arshad  
-**Created by:** Your Name  
-**GitHub Repository:** [Link to your GitHub repository]  
-""")
+            # Footer with project information
+            st.markdown("---")
+            st.markdown("""
+                        **Course Name:** AF3005 – Programming for Finance  
+                        **Instructor:** Dr. Usama Arshad  
+                        **Created by:** Your Name  
+                        **GitHub Repository:** [Link to your GitHub repository]  
+                        """)
 
-# Display a helpful error message if the app was just started
-if 'data' not in st.session_state and 'returns' not in st.session_state:
-    st.info("👆 Start by entering ticker symbols in the Portfolio Builder tab and clicking 'Load Stock Data'.")
+            # Display a helpful error message if the app was just started
+            if 'data' not in st.session_state and 'returns' not in st.session_state:
+                st.info(
+                    "👆 Start by entering ticker symbols in the Portfolio Builder tab and clicking 'Load Stock Data'.")
+        finally:
+            print("Thank You for Using this App")
