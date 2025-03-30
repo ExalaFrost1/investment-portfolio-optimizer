@@ -743,12 +743,7 @@ with tab4:
                         1. In the **Portfolio Builder** tab, enter stock tickers and load data
                         2. View the **Risk-Return Analysis** to understand individual asset performance
                         3. Use the **Portfolio Optimization** to find optimal asset allocations
-                        4. Check **Historical Performance** to see how your portfolio would have performed
-
-                        ### References
-                        - [Modern Portfolio Theory](https://en.wikipedia.org/wiki/Modern_portfolio_theory)
-                        - [Efficient Frontier](https://en.wikipedia.org/wiki/Efficient_frontier)
-                        - [Sharpe Ratio](https://en.wikipedia.org/wiki/Sharpe_ratio)
+                        4. Check **Historical Performance** to see how your portfolio would have performance
                         """)
 
             # Footer with project information
@@ -756,8 +751,8 @@ with tab4:
             st.markdown("""
                         **Course Name:** AF3005 – Programming for Finance  
                         **Instructor:** Dr. Usama Arshad  
-                        **Created by:** Your Name  
-                        **GitHub Repository:** [Link to your GitHub repository]  
+                        **Created by:** Taha Ahmed Minhas  
+                        **GitHub Repository:** https://github.com/ExalaFrost1/investment-portfolio-optimizer.git  
                         """)
 
             # Display a helpful error message if the app was just started
