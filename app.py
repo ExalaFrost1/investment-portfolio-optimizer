@@ -75,14 +75,14 @@ def validate_tickers(tickers):
 # Cache function for data loading to improve performance
 @st.cache_data(ttl=86400)
 def load_data(tickers, start, end):
-    """A simpler, more robust function to load stock data."""
+    """A robust function to load stock data that doesn't rely on 'Adj Close'."""
     if not tickers:
         return None
 
     # Create an empty DataFrame to store results
     result_df = pd.DataFrame()
 
-    # Download data for each ticker individually to avoid multi-level column issues
+    # Download data for each ticker individually
     with st.spinner(f"Loading data for {len(tickers)} tickers..."):
         for ticker in tickers:
             try:
@@ -93,21 +93,23 @@ def load_data(tickers, start, end):
                     st.warning(f"No data available for {ticker}")
                     continue
 
-                # Check if 'Adj Close' exists
-                if 'Adj Close' in ticker_data.columns:
-                    # Extract adjusted close and rename the column to the ticker symbol
-                    adj_close = ticker_data['Adj Close']
-                    adj_close = pd.DataFrame(adj_close)
-                    adj_close.columns = [ticker]
+                # Just use Close price if Adj Close is not available
+                price_col = 'Close'
 
-                    # If this is the first valid ticker, initialize the result DataFrame
-                    if result_df.empty:
-                        result_df = adj_close
-                    else:
-                        # Join with existing data
-                        result_df = result_df.join(adj_close, how='outer')
+                # Extract close prices and rename the column to the ticker symbol
+                close_prices = ticker_data[price_col]
+                close_prices = pd.DataFrame(close_prices)
+                close_prices.columns = [ticker]
+
+                # If this is the first valid ticker, initialize the result DataFrame
+                if result_df.empty:
+                    result_df = close_prices
                 else:
-                    st.warning(f"'Adj Close' column not found for {ticker}")
+                    # Join with existing data
+                    result_df = result_df.join(close_prices, how='outer')
+
+                st.success(f"Successfully loaded data for {ticker}")
+
             except Exception as e:
                 st.warning(f"Error loading data for {ticker}: {str(e)}")
 
@@ -115,6 +117,10 @@ def load_data(tickers, start, end):
     if result_df.empty:
         st.error("Could not load data for any of the provided tickers.")
         return None
+
+    # Fill any NaN values that might have been introduced during the join
+    # (this happens if tickers have different trading days)
+    result_df = result_df.fillna(method='ffill')
 
     return result_df
 
