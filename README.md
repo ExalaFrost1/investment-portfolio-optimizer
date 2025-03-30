@@ -21,11 +21,20 @@ The Investment Portfolio Optimizer is an interactive financial web application b
 
 ##  Screenshots
 
-![Portfolio Builder](\screenshots\Portfolio Builder)
-![Historical Performances](\screenshots\Historical Performances)
-![Portfolio Optimization](\screenshots\Portfolio Optimization)
-![Analysis](\screenshots\Analysis)
-![Graphs](\screenshots\Graphs)
+### Portfolio Builder
+![Portfolio Builder](screenshots/Portfolio%20Builder.png)
+
+### Risk-Return Analysis
+![Analysis](screenshots/Analysis.png)
+
+### Portfolio Optimization
+![Portfolio Optimization](screenshots/Portfolio%20Optimization.png)
+
+### Historical Performance
+![Historical Performances](screenshots/Historical%20Performances.png)
+
+### Additional Charts
+![Graphs](screenshots/Graphs.png)
 
 
 ##  Live App****
