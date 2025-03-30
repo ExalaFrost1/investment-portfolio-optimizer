@@ -75,51 +75,48 @@ def validate_tickers(tickers):
 # Cache function for data loading to improve performance
 @st.cache_data(ttl=86400)
 def load_data(tickers, start, end):
-    """Load stock data with improved error handling."""
+    """A simpler, more robust function to load stock data."""
     if not tickers:
         return None
 
-    try:
-        # Try to download the data
-        data = yf.download(tickers, start=start, end=end, progress=False)
+    # Create an empty DataFrame to store results
+    result_df = pd.DataFrame()
 
-        # If only one ticker, the structure is different
-        if len(tickers) == 1:
-            if data.empty:
-                st.error(f"No data available for {tickers[0]} in the selected date range.")
-                return None
+    # Download data for each ticker individually to avoid multi-level column issues
+    with st.spinner(f"Loading data for {len(tickers)} tickers..."):
+        for ticker in tickers:
+            try:
+                # Download single ticker data
+                ticker_data = yf.download(ticker, start=start, end=end, progress=False)
 
-            # Create a dataframe with the ticker as column name
-            adj_close = data['Adj Close']
-            adj_close_df = pd.DataFrame(adj_close)
-            adj_close_df.columns = [tickers[0]]
-            return adj_close_df
+                if ticker_data.empty:
+                    st.warning(f"No data available for {ticker}")
+                    continue
 
-        # For multiple tickers, check if 'Adj Close' is in the columns
-        if 'Adj Close' not in data.columns.get_level_values(0) and len(data.columns) > 0:
-            st.error("Data structure from Yahoo Finance has changed. Please check the API.")
-            return None
+                # Check if 'Adj Close' exists
+                if 'Adj Close' in ticker_data.columns:
+                    # Extract adjusted close and rename the column to the ticker symbol
+                    adj_close = ticker_data['Adj Close']
+                    adj_close = pd.DataFrame(adj_close)
+                    adj_close.columns = [ticker]
 
-        # Extract Adj Close prices
-        adj_close = data['Adj Close']
+                    # If this is the first valid ticker, initialize the result DataFrame
+                    if result_df.empty:
+                        result_df = adj_close
+                    else:
+                        # Join with existing data
+                        result_df = result_df.join(adj_close, how='outer')
+                else:
+                    st.warning(f"'Adj Close' column not found for {ticker}")
+            except Exception as e:
+                st.warning(f"Error loading data for {ticker}: {str(e)}")
 
-        # Check if any columns have all NaN values
-        null_columns = adj_close.columns[adj_close.isna().all()]
-        if not null_columns.empty:
-            st.warning(f"No data available for: {', '.join(null_columns)}")
-            # Remove columns with all NaN values
-            adj_close = adj_close.drop(columns=null_columns)
-
-        # Check if we have any data left
-        if adj_close.empty:
-            st.error("No valid data available for the selected tickers and date range.")
-            return None
-
-        return adj_close
-
-    except Exception as e:
-        st.error(f"Error loading data: {str(e)}. Please check your ticker symbols and date range.")
+    # Check if we have any data
+    if result_df.empty:
+        st.error("Could not load data for any of the provided tickers.")
         return None
+
+    return result_df
 
 
 # Function to calculate portfolio performance
