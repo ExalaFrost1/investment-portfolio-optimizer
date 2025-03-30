@@ -40,10 +40,10 @@ The Investment Portfolio Optimizer is an interactive financial web application b
 ##  Live App****
 
 You can access the deployed app on Streamlit Cloud:
-[Investment Portfolio Optimizer App](https://your-streamlit-app-url.streamlit.app/)
+[Investment Portfolio Optimizer App](https://investment-portfolio-optimizer.streamlit.app/)
 
 ##  Installation Guide
-
+   
 ### Prerequisites
 - Python 3.8 or higher
 - pip (Python package installer)
@@ -52,7 +52,7 @@ You can access the deployed app on Streamlit Cloud:
 
 1. **Clone the repository:**
    ```bash
-   git clone https://github.com/your-username/investment-portfolio-optimizer.git
+   git clone https://github.com/ExalaFrost1/investment-portfolio-optimizer.git
    cd investment-portfolio-optimizer
    ```
 
