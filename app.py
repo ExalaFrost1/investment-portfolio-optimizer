@@ -576,13 +576,15 @@ with tab4:
 
         try:
             with st.spinner(f"Loading benchmark data for {benchmark_ticker}..."):
-                benchmark_data = yf.download(benchmark_ticker, start=start_date, end=end_date, progress=False)[
-                    'Adj Close']
+                # Download benchmark data
+                benchmark_data_full = yf.download(benchmark_ticker, start=start_date, end=end_date, progress=False)
 
-                if benchmark_data.empty:
+                if benchmark_data_full.empty:
                     st.error(
                         f"No data available for benchmark {benchmark_ticker}. Please select a different benchmark.")
                 else:
+                    # Use Close price column to avoid 'Adj Close' KeyError
+                    benchmark_data = benchmark_data_full['Close']
                     benchmark_returns = benchmark_data.pct_change().dropna()
 
                     # Match benchmark returns index with portfolio returns
@@ -729,6 +731,9 @@ with tab4:
                                     "This might be due to insufficient data or date range spanning less than a month.")
                         else:
                             st.info("Not enough data for monthly returns analysis. Please select a longer date range.")
+        except Exception as e:
+            st.error(f"Error processing benchmark data: {str(e)}")
+            st.info("Try selecting a different benchmark or check your internet connection.")
 
 
             # Instructions and additional information at the bottom
